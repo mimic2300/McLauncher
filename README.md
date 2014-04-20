@@ -1,0 +1,4 @@
+McLauncher
+==========
+
+Simple Minecraft Launcher
