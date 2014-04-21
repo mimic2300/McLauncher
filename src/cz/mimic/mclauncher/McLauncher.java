@@ -5,6 +5,7 @@ import cz.mimic.mclauncher.config.Config;
 import cz.mimic.mclauncher.config.ConfigApplication;
 import cz.mimic.mclauncher.config.ConfigJava;
 import cz.mimic.mclauncher.config.ConfigMinecraft;
+import cz.mimic.mclauncher.config.example.ExampleConfig;
 import cz.mimic.mclauncher.json.Json;
 
 public final class McLauncher
@@ -13,8 +14,14 @@ public final class McLauncher
 
     public static void main(String[] args)
     {
-        // Json.save(JSON_FILE, new Config());
+        // allow build default config
+        if (args.length == 1) {
+            ExampleConfig example = ExampleConfig.findById(args[0].toLowerCase());
 
+            if (example != null) {
+                Json.save(JSON_FILE, example.config());
+            }
+        }
         Config config = Json.load(JSON_FILE);
 
         if (config == null) {

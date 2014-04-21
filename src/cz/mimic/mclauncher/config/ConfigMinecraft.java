@@ -11,34 +11,34 @@ import com.google.gson.annotations.SerializedName;
 public final class ConfigMinecraft
 {
     @SerializedName("game_dir")
-    public String gameDir = "F:\\Games_Install-Dir\\Minecraft-1.7.2";
+    public String gameDir;
 
     @SerializedName("assets_dir")
-    public String assetsDir = "{game_dir}\\assets\\virtual\\legacy";
+    public String assetsDir;
 
     @SerializedName("libraries_dir")
-    public String librariesDir = "{game_dir}\\libraries";
+    public String librariesDir;
 
     @SerializedName("natives_dir")
-    public String nativesDir = "{game_dir}\\versions\\{version}\\{version}-natives";
+    public String nativesDir;
 
     @SerializedName("main_class")
-    public String mainClass = "net.minecraft.launchwrapper.Launch";
+    public String mainClass;
 
     @SerializedName("username")
-    public String username = "mimic";
+    public String username;
 
     @SerializedName("version")
-    public String version = "1.7.2-Forge10.12.1.1061";
+    public String version;
 
     @SerializedName("asset_index")
-    public String assetIndex; // optional
+    public String assetIndex;
 
     @SerializedName("uuid")
-    public String uuid; // optional
+    public String uuid;
 
     @SerializedName("access_token")
-    public String accessToken = "1337535510N";
+    public String accessToken;
 
     @SerializedName("minecraft_custom_parameters")
     public Map<String, String> customParameters = new HashMap<String, String>();

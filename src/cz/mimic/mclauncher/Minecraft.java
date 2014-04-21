@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Stack;
 
 import cz.mimic.mclauncher.config.Config;
+import cz.mimic.mclauncher.util.Message;
 
 public class Minecraft implements Runnable
 {
@@ -34,6 +35,29 @@ public class Minecraft implements Runnable
         String bat = sb.toString();
 
         try {
+            if (config.application.uniqueTitle == null) {
+                Message.error("Application unique title is empty!");
+                return;
+            }
+            if (config.application.runFormat == null) {
+                Message.error("Application run format is empty!");
+                return;
+            }
+            if (config.application.closeFormat == null) {
+                Message.error("Application close format is empty!");
+                return;
+            }
+            if (config.application.delayBeforeDelete == null) {
+                Message.error("Application delay before delete time is empty!");
+                return;
+            }
+            try {
+                Integer.parseInt(config.application.delayBeforeDelete);
+
+            } catch (NumberFormatException e) {
+                Message.error("Application delay before delete time is not a number!");
+                return;
+            }
             File temp = File.createTempFile(config.application.uniqueTitle, "." + BAT_EXTENSION);
             Files.write(Paths.get(temp.getAbsolutePath()), bat.getBytes());
 
@@ -55,6 +79,10 @@ public class Minecraft implements Runnable
 
     public static List<String> loadLibs(String libDirectory)
     {
+        if (libDirectory == null) {
+            Message.error("Libraries directory not exists!");
+            return new ArrayList<String>();
+        }
         File root = new File(libDirectory);
         Stack<File> stack = new Stack<File>();
         List<String> libs = new ArrayList<String>();
@@ -80,7 +108,7 @@ public class Minecraft implements Runnable
 
     private void buildBatContent()
     {
-        // sb.append("@echo off & ");
+        sb.append("@echo off & ");
         sb.append("cd \"").append(config.minecraft.gameDir).append("\" & ");
         sb.append("\"").append(config.java.javawDir).append("\"");
         sb.append(" -XX:HeapDumpPath=")
