@@ -1,82 +1,91 @@
 package cz.mimic.mclauncher.config;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import com.google.gson.annotations.SerializedName;
+import cz.mimic.mclauncher.tag.Tag;
+import cz.mimic.mclauncher.tag.Tagged;
 
+/**
+ * Konfigurace pro minecraft.
+ * 
+ * @author mimic
+ */
+@Tagged("mc")
 public final class ConfigMinecraft
 {
-    @SerializedName("game_dir")
-    public String gameDir;
+    public ConfigMinecraftDirectories directories;
+    public ConfigMinecraftParameters parameters;
 
-    @SerializedName("assets_dir")
-    public String assetsDir;
-
-    @SerializedName("libraries_dir")
-    public String librariesDir;
-
-    @SerializedName("natives_dir")
-    public String nativesDir;
-
-    @SerializedName("main_class")
+    @Tag("mainClass")
     public String mainClass;
 
-    @SerializedName("username")
-    public String username;
+    @Tag("customLibs")
+    public List<String> customLibs;
 
-    @SerializedName("version")
-    public String version;
+    @Tag("libs")
+    public List<String> autoLoadedLibs;
 
-    @SerializedName("asset_index")
-    public String assetIndex;
+    /**
+     * Vytvori instanci konfigurace pro minecraft.
+     */
+    public ConfigMinecraft()
+    {}
 
-    @SerializedName("uuid")
-    public String uuid;
-
-    @SerializedName("access_token")
-    public String accessToken;
-
-    @SerializedName("minecraft_custom_parameters")
-    public Map<String, String> customParameters = new HashMap<String, String>();
-
-    @SerializedName("minecraft_custom_libs")
-    public List<String> customLibs = new ArrayList<String>();
-
-    // @Hide
-    @SerializedName("libs")
-    public List<String> libs = new ArrayList<String>();
-
-    public String getCustomParametersString()
+    /**
+     * vytvori kopii konfigurace pro minecraft.
+     * 
+     * @param c
+     */
+    public ConfigMinecraft(ConfigMinecraft c)
     {
-        StringBuilder sb = new StringBuilder();
+        mainClass = c.mainClass;
+        directories = new ConfigMinecraftDirectories(c.directories);
+        parameters = new ConfigMinecraftParameters(c.parameters);
 
-        for (Entry<String, String> entry : customParameters.entrySet()) {
-            sb.append(String.format("--%s %s ", entry.getKey(), entry.getValue()));
+        if (c.customLibs != null) {
+            customLibs = new ArrayList<String>(c.customLibs);
         }
-        return sb.toString();
+        if (c.autoLoadedLibs != null) {
+            autoLoadedLibs = new ArrayList<String>(c.autoLoadedLibs);
+        }
     }
 
-    public String getLibsString()
+    /**
+     * Vytvori ze seznamu knihoven jeden string, kde kazda knihovna bude oddelena strednikem.
+     * 
+     * @return
+     */
+    public String getAutoLoadedLibsString()
     {
-        return prepareLibs(libs);
+        return prepareLibs(autoLoadedLibs);
     }
 
+    /**
+     * Vytvori ze seznamu vlastnich knihoven jeden string, kde kazda knihovna bude oddelena strednikem.
+     * 
+     * @return
+     */
     public String getCustomLibsString()
     {
         return prepareLibs(customLibs);
     }
 
+    /**
+     * Vytvori ze seznamu knihoven a vlastnich knihoven jeden string, kde kazda knihovna bude oddelena strednikem.
+     * 
+     * @return
+     */
     public String getAllLibsString()
     {
-        return getLibsString() + getCustomLibsString();
+        return getAutoLoadedLibsString() + getCustomLibsString();
     }
 
     private String prepareLibs(List<String> libs)
     {
+        if (libs == null) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
 
         for (String lib : libs) {

@@ -7,18 +7,28 @@ public final class Message
     private Message()
     {}
 
-    public static void info(String message)
+    public static void error(String message, Object... params)
     {
-        JOptionPane.showMessageDialog(null, message, "Notice", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, String.format(message, params), "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void warning(String message)
+    public static void error(Exception ex)
     {
-        JOptionPane.showMessageDialog(null, message, "Warning", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void error(String message)
+    public static void warning(String message, Object... params)
     {
-        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, String.format(message, params), "Warning", JOptionPane.WARNING_MESSAGE);
+    }
+
+    public static void info(String message, Object... params)
+    {
+        JOptionPane.showMessageDialog(null, String.format(message, params), "Notice", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void debug(String message, Object... params)
+    {
+        JOptionPane.showMessageDialog(null, String.format(message, params), "Debug", JOptionPane.INFORMATION_MESSAGE);
     }
 }

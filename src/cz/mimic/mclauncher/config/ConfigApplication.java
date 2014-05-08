@@ -1,18 +1,60 @@
 package cz.mimic.mclauncher.config;
 
-import com.google.gson.annotations.SerializedName;
+import cz.mimic.mclauncher.tag.Tag;
+import cz.mimic.mclauncher.tag.Tagged;
 
+@Tagged("app")
 public final class ConfigApplication
 {
-    @SerializedName("run_format")
+    @Tag("runFormat")
     public String runFormat;
 
-    @SerializedName("close_format")
+    @Tag("closeFormat")
     public String closeFormat;
 
-    @SerializedName("delay_before_delete")
+    @Tag("delayBeforeDelete")
     public String delayBeforeDelete;
 
-    @SerializedName("unique_title")
+    @Tag("uniqueTitle")
     public String uniqueTitle;
+
+    @Tag("removeLogs")
+    public String removeLogs;
+
+    @Tag("loggingLevel")
+    public String loggingLevel;
+
+    /**
+     * Vytvori instanci konfigurace aplikace.
+     */
+    public ConfigApplication()
+    {}
+
+    /**
+     * Vytvori kopii konfigurace aplikace.
+     * 
+     * @param c
+     */
+    public ConfigApplication(ConfigApplication c)
+    {
+        runFormat = c.runFormat;
+        closeFormat = c.closeFormat;
+        delayBeforeDelete = c.delayBeforeDelete;
+        uniqueTitle = c.uniqueTitle;
+        removeLogs = c.removeLogs;
+        loggingLevel = c.loggingLevel;
+    }
+
+    /**
+     * Ma byt povoleno automaticke odebrani logu?
+     * 
+     * @return
+     */
+    public boolean isRemoveLogs()
+    {
+        if (removeLogs == null) {
+            removeLogs = "true"; // vychozi hodnota
+        }
+        return removeLogs.equalsIgnoreCase("true");
+    }
 }

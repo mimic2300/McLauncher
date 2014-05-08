@@ -5,26 +5,66 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
+import cz.mimic.mclauncher.tag.Tag;
+import cz.mimic.mclauncher.tag.Tagged;
+
+/**
+ * Konfigurace pro javu.
+ * 
+ * @author mimic
+ */
+@Tagged("java")
 public final class ConfigJava
 {
-    @SerializedName("javaw_dir")
+    @Tag("javawDir")
     public String javawDir;
 
-    @SerializedName("initial_memory")
+    @Tag("xms")
+    @SerializedName("initialMemory")
     public String xms;
 
-    @SerializedName("max_memory")
+    @Tag("xmx")
+    @SerializedName("maxMemory")
     public String xmx;
 
-    @SerializedName("java_custom_parameters")
-    public List<String> customParameters = new ArrayList<String>();
+    @Tag("params")
+    public List<String> params;
 
-    public String getCustomParametersString()
+    /**
+     * Vytvori instanci konfigurace javy.
+     */
+    public ConfigJava()
+    {}
+
+    /**
+     * Vytvori kopii konfigurace javy.
+     * 
+     * @param c
+     */
+    public ConfigJava(ConfigJava c)
+    {
+        javawDir = c.javawDir;
+        xms = c.xms;
+        xmx = c.xmx;
+
+        if (c.params != null) {
+            params = new ArrayList<String>(c.params);
+        }
+    }
+
+    /**
+     * Ziska vsechny parametry v podobe stringu.
+     * 
+     * @return
+     */
+    public String parametersString()
     {
         StringBuilder sb = new StringBuilder();
 
-        for (String param : customParameters) {
-            sb.append(param).append(" ");
+        if (params != null) {
+            for (String param : params) {
+                sb.append(param).append(" ");
+            }
         }
         return sb.toString();
     }
