@@ -102,6 +102,6 @@ public final class McLauncher
 
         // spusti minecraft
         MinecraftRunner mcRunner = new MinecraftRunner(config);
-        // new Thread(mcRunner).start();
+        new Thread(mcRunner).start();
     }
 }
