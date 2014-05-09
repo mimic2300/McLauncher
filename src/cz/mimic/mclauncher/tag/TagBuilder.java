@@ -5,7 +5,6 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -198,7 +197,6 @@ public final class TagBuilder
                     if (value == null) {
                         continue;
                     }
-
                     if (value instanceof List) {
                         List<String> list = (List<String>) value;
 
@@ -206,14 +204,8 @@ public final class TagBuilder
                             String translate = replaceTags(list.get(i));
                             list.set(i, translate);
                         }
-                    } else if (value instanceof Map) {
-                        Map<String, String> map = (Map<String, String>) value;
-
-                        for (Entry<String, String> entry : map.entrySet()) {
-                            String translate = replaceTags(entry.getValue().toString());
-                            map.remove(entry.getKey());
-                            map.put(entry.getKey(), translate);
-                        }
+                    } else if (!(value instanceof String)) {
+                        field.set(classInstance, value);
                     } else {
                         String translate = replaceTags(value.toString()); // hodnota by mela byt primitivni typ
                         field.set(classInstance, translate);

@@ -62,23 +62,6 @@ public final class Minecraft
     }
 
     /**
-     * Vytvori obsah bat souboru.
-     * 
-     * @param directories
-     * @return
-     */
-    public static String createBatFileContent(Config config)
-    {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("@echo off & ");
-        sb.append("cd \"").append(config.minecraft.directories.game).append("\" & ");
-        sb.append(createJavaCommand(config));
-
-        return sb.toString();
-    }
-
-    /**
      * Ziska soubor s minecraftem.
      * 
      * @param minecraft
@@ -97,7 +80,13 @@ public final class Minecraft
         return file.getAbsolutePath();
     }
 
-    private static String createJavaCommand(Config config)
+    /**
+     * Vytvori prikaz pro spusteni minecraftu.
+     * 
+     * @param config
+     * @return
+     */
+    public static String createJavaCommand(Config config)
     {
         StringBuilder sb = new StringBuilder();
 
@@ -114,6 +103,7 @@ public final class Minecraft
         sb.append(Util.getParametersString(config.minecraft.parameters));
         sb.append(Util.getParametersString(config.minecraft.directories));
 
+        LOGGER.debug("createJavaCommand", "Prikaz pro spusteni: %s", sb.toString());
         return sb.toString();
     }
 }

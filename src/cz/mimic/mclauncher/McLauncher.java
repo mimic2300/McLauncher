@@ -47,7 +47,7 @@ public final class McLauncher
     public static void main(String[] args) throws InterruptedException
     {
         Logger.open();
-        Logger.setLoggingLevel(LoggingLevel.ALL.flag() ^ LoggingLevel.DEBUG.flag());
+        Logger.setLoggingLevel(LoggingLevel.DEFAULT);
 
         // kontrola typu operacniho systemu
         if (!SystemCheck.isSupported()) {
@@ -111,16 +111,19 @@ public final class McLauncher
         }
 
         // odebere vsechny soubory s logy v adresari s hrou
-        if (config.application.isRemoveLogs()) {
+        if (config.application.removeLogs) {
             LogsRemover.start(config.minecraft.directories.game);
         }
 
         // spusti minecraft
         MinecraftRunner mcRunner = new MinecraftRunner(config);
-        new Thread(mcRunner).start();
+        mcRunner.start();
 
-        // prodleva pro dokonceni zapisu do logu a uzavreni logu
-        Thread.sleep(1000);
+        if (config.application.showConsole) {
+            mcRunner.join();
+        } else {
+            Thread.sleep(1000); // prodleva pro dokonceni zapisu do logu a uzavreni logu
+        }
         exit();
     }
 

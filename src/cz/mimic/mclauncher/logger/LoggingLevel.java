@@ -1,7 +1,10 @@
 package cz.mimic.mclauncher.logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Uroven logovani.
@@ -31,9 +34,19 @@ public enum LoggingLevel
     DEBUG(0x8),
 
     /**
+     * Loguje samotny vystup minecraftu.
+     */
+    MINECRAFT(0x10),
+
+    /**
      * Loguje vse.
      */
-    ALL(0xF);
+    ALL(0x1 | 0x2 | 0x4 | 0x8 | 0x10),
+
+    /**
+     * Vychozi uroven logovani.
+     */
+    DEFAULT(0x2 | 0x4);
 
     private static final Logger LOGGER = new Logger(LoggingLevel.class);
 
@@ -70,7 +83,7 @@ public enum LoggingLevel
      * @param levels
      * @return
      */
-    public static int getFlag(LoggingLevel... levels)
+    public static int getFlag(List<LoggingLevel> levels)
     {
         int value = 0;
 
@@ -78,6 +91,17 @@ public enum LoggingLevel
             value |= level.flag;
         }
         return value;
+    }
+
+    /**
+     * Ziska hodnotu flagu pro seznam urovni logovani.
+     * 
+     * @param levels
+     * @return
+     */
+    public static int getFlag(LoggingLevel... levels)
+    {
+        return getFlag(Arrays.asList(levels));
     }
 
     /**
@@ -99,29 +123,53 @@ public enum LoggingLevel
     }
 
     /**
+     * Ziska seznam urovni logovani z stringu, kde jsou jednotlive urovne oddeleny carkou.
+     * 
+     * @param loggingLevel
+     * @return
+     */
+    public static List<LoggingLevel> getLevels(String loggingLevel)
+    {
+        Set<LoggingLevel> levels = new HashSet<LoggingLevel>();
+        String[] tokens = loggingLevel.split(",");
+
+        for (String token : tokens) {
+            LoggingLevel level = getByName(token.replaceAll("\\s+", ""));
+            levels.add(level);
+        }
+        return new ArrayList<LoggingLevel>(levels);
+    }
+
+    /**
      * Zkontroluje, jestli flag obsahuje nejakou uroven logovani.
      * 
      * @param flags
-     * @param level
+     * @param levels
      * @return
      */
-    public static boolean hasLevel(int flags, LoggingLevel... levels)
+    public static boolean hasLevel(int flags, List<LoggingLevel> levels)
     {
-        for (LoggingLevel level : levels) {
-            if ((flags & level.flag) != 0) {
-                return true;
-            }
+        int levelsFlag = getFlag(levels);
+
+        if ((flags & levelsFlag) == levelsFlag) {
+            return true;
         }
         return false;
     }
 
     /**
-     * Ziska uroven logovani podle nazvu typu. Pokud takovy typ nebude existovat, tak vrati vychozi uroven ERROR.
+     * Zkontroluje, jestli flag obsahuje nejakou uroven logovani.
      * 
-     * @param name
+     * @param flags
+     * @param levels
      * @return
      */
-    public static LoggingLevel getByName(String name)
+    public static boolean hasLevel(int flags, LoggingLevel... levels)
+    {
+        return hasLevel(flags, Arrays.asList(levels));
+    }
+
+    private static LoggingLevel getByName(String name)
     {
         for (LoggingLevel level : values()) {
             if (level.name().equalsIgnoreCase(name)) {

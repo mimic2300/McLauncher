@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * Slouzi pro logovani ruznych udalosti.
@@ -197,6 +198,20 @@ public class Logger
     }
 
     /**
+     * Zaloguje minecraft zpravu.
+     * 
+     * @param method
+     * @param message
+     * @param params
+     */
+    public void minecraft(String message)
+    {
+        if (LoggingLevel.hasLevel(level, LoggingLevel.MINECRAFT)) {
+            write(String.format("[MC] %s%n", message));
+        }
+    }
+
+    /**
      * Nastavi uroven logovani.
      * 
      * @param levels
@@ -223,7 +238,8 @@ public class Logger
      */
     public static void setLoggingLevel(String loggingLevel)
     {
-        level = LoggingLevel.getByName(loggingLevel).flag();
+        List<LoggingLevel> levels = LoggingLevel.getLevels(loggingLevel);
+        level = LoggingLevel.getFlag(levels);
     }
 
     private static void write(String message)

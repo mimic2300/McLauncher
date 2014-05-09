@@ -1,9 +1,8 @@
 package cz.mimic.mclauncher.minecraft;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
 
 import cz.mimic.mclauncher.config.Config;
 import cz.mimic.mclauncher.logger.Logger;
@@ -13,7 +12,7 @@ import cz.mimic.mclauncher.logger.Logger;
  * 
  * @author mimic
  */
-public class MinecraftRunner implements Runnable
+public class MinecraftRunner extends Thread
 {
     private static final Logger LOGGER = new Logger(MinecraftRunner.class);
 
@@ -36,52 +35,25 @@ public class MinecraftRunner implements Runnable
     @Override
     public void run()
     {
-        String batContent = Minecraft.createBatFileContent(config);
-
         try {
-            if (config.application.uniqueTitle == null) {
-                LOGGER.error("run", "Aplikace nema vyplneny unikatni titulek");
-                return;
-            }
-            if (config.application.runFormat == null) {
-                LOGGER.error("run", "Format pro spusteni neni vyplneny");
-                return;
-            }
-            if (config.application.closeFormat == null) {
-                LOGGER.error("run", "Format pro ukonceni neni vyplneny");
-                return;
-            }
-            if (config.application.delayBeforeDelete == null) {
-                LOGGER.error("run", "Prodleva pred smazanim tempu neni vyplnena");
-                return;
-            }
-            try {
-                Integer.parseInt(config.application.delayBeforeDelete);
+            String command = Minecraft.createJavaCommand(config);
+            Process proc = Runtime.getRuntime().exec(command);
+            String line;
 
-            } catch (NumberFormatException e) {
-                LOGGER.error("run", "Prodleva %s neni cislo", config.application.delayBeforeDelete);
-                return;
-            }
-            File temp = File.createTempFile(config.application.uniqueTitle, ".bat");
-            Files.write(Paths.get(temp.getAbsolutePath()), batContent.getBytes());
+            LOGGER.info("run", "Minecraft se nyni spusti, pockejte prosim...%n");
 
-            Runtime.getRuntime().exec(String.format(config.application.runFormat,
-                    config.application.uniqueTitle,
-                    temp.getAbsolutePath()));
-            Runtime.getRuntime().exec(String.format(config.application.closeFormat, config.application.uniqueTitle));
-
-            LOGGER.info("run", "Minecraft byl spusten");
-
-            try {
-                Thread.sleep(Integer.valueOf(config.application.delayBeforeDelete));
-                Files.delete(Paths.get(temp.getAbsolutePath()));
-
-            } catch (InterruptedException e) {
-                LOGGER.error("run", "Nastala chyba v preruseni vlakna");
-                e.printStackTrace();
+            if (config.application.showConsole) {
+                try (BufferedReader input = new BufferedReader(new InputStreamReader(proc.getInputStream()))) {
+                    while ((line = input.readLine()) != null) {
+                        if (isInterrupted()) {
+                            break;
+                        }
+                        LOGGER.minecraft(line);
+                    }
+                }
             }
         } catch (IOException e) {
-            LOGGER.error("run", "Nastala chyba pri vytvareni souboru pro spusteni minecraftu");
+            LOGGER.error("run", "Nastala chyba pri vytvareni procesu minecraftu");
             e.printStackTrace();
         }
     }

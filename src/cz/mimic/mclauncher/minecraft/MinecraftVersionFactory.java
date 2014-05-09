@@ -1,7 +1,7 @@
 package cz.mimic.mclauncher.minecraft;
 
-import cz.mimic.mclauncher.config.Config;
 import cz.mimic.mclauncher.config.ApplicationConfig;
+import cz.mimic.mclauncher.config.Config;
 import cz.mimic.mclauncher.config.JavaConfig;
 import cz.mimic.mclauncher.config.MinecraftConfig;
 import cz.mimic.mclauncher.config.MinecraftDirectoriesConfig;
@@ -42,7 +42,7 @@ public final class MinecraftVersionFactory
                 break;
 
             default:
-                String message = String.format("Verze minecraftu %s neni zatim naimplementovana", version);
+                String message = String.format("Verze minecraftu %s zatim neni implementovana", version);
                 LOGGER.error("createConfig", message);
                 Message.error(message);
                 return null;
@@ -53,12 +53,9 @@ public final class MinecraftVersionFactory
     private static void setDefaultApplicationConfig(Config config)
     {
         ApplicationConfig application = new ApplicationConfig();
-        application.runFormat = "cmd /k start \"%s\" /min %s"; // 1 %s je uniqueTitle, 2 %s je absolutni cesta k .bat
-        application.closeFormat = "taskkill /FI \"WINDOWTITLE eq %s*\""; // %s je uniqueTitle
-        application.delayBeforeDelete = "3000"; // ms
-        application.uniqueTitle = "17777d4fc9b804df4755d024b0f6860f";
-        application.removeLogs = "true";
-        application.loggingLevel = LoggingLevel.ERROR.name();
+        application.removeLogs = true;
+        application.showConsole = false;
+        application.loggingLevel = LoggingLevel.DEFAULT.name();
 
         config.application = application;
     }

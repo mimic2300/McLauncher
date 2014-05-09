@@ -6,23 +6,14 @@ import cz.mimic.mclauncher.tag.Tagged;
 @Tagged("app")
 public final class ApplicationConfig
 {
-    @Tag("runFormat")
-    public String runFormat;
-
-    @Tag("closeFormat")
-    public String closeFormat;
-
-    @Tag("delayBeforeDelete")
-    public String delayBeforeDelete;
-
-    @Tag("uniqueTitle")
-    public String uniqueTitle;
-
     @Tag("removeLogs")
-    public String removeLogs;
+    public Boolean removeLogs;
+
+    @Tag("showConsole")
+    public Boolean showConsole;
 
     @Tag("loggingLevel")
-    public String loggingLevel;
+    public String loggingLevel; // uchovava seznam urovni oddeleny carkou
 
     /**
      * Vytvori instanci konfigurace aplikace.
@@ -37,24 +28,8 @@ public final class ApplicationConfig
      */
     public ApplicationConfig(ApplicationConfig c)
     {
-        runFormat = c.runFormat;
-        closeFormat = c.closeFormat;
-        delayBeforeDelete = c.delayBeforeDelete;
-        uniqueTitle = c.uniqueTitle;
         removeLogs = c.removeLogs;
+        showConsole = c.showConsole;
         loggingLevel = c.loggingLevel;
-    }
-
-    /**
-     * Ma byt povoleno automaticke odebrani logu?
-     * 
-     * @return
-     */
-    public boolean isRemoveLogs()
-    {
-        if (removeLogs == null) {
-            removeLogs = "true"; // vychozi hodnota
-        }
-        return removeLogs.equalsIgnoreCase("true");
     }
 }
