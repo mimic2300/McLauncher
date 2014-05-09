@@ -19,15 +19,13 @@ public final class Minecraft
 {
     private static final Logger LOGGER = new Logger(Minecraft.class);
 
-    public static final String CONFIG_FILE = "mcLauncher.json";
-
     private Minecraft()
     {}
 
     /**
      * Vyhleda vsechny knihovny a prida do seznamu.
      * 
-     * @param librariesDirectory
+     * @param minecraft
      * @return
      */
     public static List<String> loadLibraries(MinecraftConfig minecraft)
@@ -95,7 +93,10 @@ public final class Minecraft
                 .append("MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump");
         sb.append(" -Xms").append(config.java.xms);
         sb.append(" -Xmx").append(config.java.xmx);
-        sb.append(" ").append(config.java.parametersString());
+
+        if (config.java.parameters != null) {
+            sb.append(" ").append(config.java.getParametersString());
+        }
         sb.append(" -Djava.library.path=\"").append(config.minecraft.directories.natives).append("\"");
         sb.append(" -cp \"").append(config.minecraft.getAllLibsString()).append("\"");
 

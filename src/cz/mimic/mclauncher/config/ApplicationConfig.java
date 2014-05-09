@@ -1,16 +1,21 @@
 package cz.mimic.mclauncher.config;
 
+import cz.mimic.mclauncher.McLauncher;
+import cz.mimic.mclauncher.logger.LoggingLevel;
 import cz.mimic.mclauncher.tag.Tag;
 import cz.mimic.mclauncher.tag.Tagged;
 
 @Tagged("app")
 public final class ApplicationConfig
 {
+    @Tag("version")
+    public String version;
+
     @Tag("removeLogs")
     public Boolean removeLogs;
 
-    @Tag("showConsole")
-    public Boolean showConsole;
+    @Tag("consoleOutput")
+    public Boolean consoleOutput;
 
     @Tag("loggingLevel")
     public String loggingLevel; // uchovava seznam urovni oddeleny carkou
@@ -19,7 +24,12 @@ public final class ApplicationConfig
      * Vytvori instanci konfigurace aplikace.
      */
     public ApplicationConfig()
-    {}
+    {
+        version = McLauncher.VERSION;
+        removeLogs = true;
+        consoleOutput = false;
+        loggingLevel = LoggingLevel.DEFAULT.name();
+    }
 
     /**
      * Vytvori kopii konfigurace aplikace.
@@ -28,8 +38,9 @@ public final class ApplicationConfig
      */
     public ApplicationConfig(ApplicationConfig c)
     {
+        version = c.version;
         removeLogs = c.removeLogs;
-        showConsole = c.showConsole;
+        consoleOutput = c.consoleOutput;
         loggingLevel = c.loggingLevel;
     }
 }

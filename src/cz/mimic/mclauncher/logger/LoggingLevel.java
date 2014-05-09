@@ -34,11 +34,6 @@ public enum LoggingLevel
     DEBUG(0x8),
 
     /**
-     * Loguje samotny vystup minecraftu.
-     */
-    MINECRAFT(0x10),
-
-    /**
      * Loguje vse.
      */
     ALL(0x1 | 0x2 | 0x4 | 0x8 | 0x10),
@@ -62,7 +57,7 @@ public enum LoggingLevel
      * 
      * @return
      */
-    public int flag()
+    public int getFlag()
     {
         return flag;
     }
@@ -102,24 +97,6 @@ public enum LoggingLevel
     public static int getFlag(LoggingLevel... levels)
     {
         return getFlag(Arrays.asList(levels));
-    }
-
-    /**
-     * Ziska seznam urovni logovani z flagu.
-     * 
-     * @param flag
-     * @return
-     */
-    public static List<LoggingLevel> getLevels(int flag)
-    {
-        List<LoggingLevel> levels = new ArrayList<LoggingLevel>();
-
-        for (LoggingLevel level : values()) {
-            if ((level.flag & flag) == level.flag) {
-                levels.add(level);
-            }
-        }
-        return levels;
     }
 
     /**

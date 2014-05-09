@@ -36,6 +36,9 @@ public final class McLauncher
 {
     private static final Logger LOGGER = new Logger(McLauncher.class);
 
+    public static final String CONFIG_FILE = "mcLauncher.json";
+    public static final String VERSION = "2.0.2";
+
     private static Config config;
 
     /**
@@ -46,19 +49,19 @@ public final class McLauncher
      */
     public static void main(String[] args) throws InterruptedException
     {
-        Logger.open();
+        Logger.initialize();
         Logger.setLoggingLevel(LoggingLevel.DEFAULT);
 
         // kontrola typu operacniho systemu
         if (!SystemCheck.isSupported()) {
             String message = String.format("Vas operacni system neni aplikaci podporovan. Podporovane systemy jsou pouze %s",
-                    SystemType.supportedSystems());
+                    SystemType.getSupportedSystems());
             LOGGER.error("main", message);
             Message.error(message);
             exit();
         }
 
-        config = Config.load(Minecraft.CONFIG_FILE);
+        config = Config.load(CONFIG_FILE);
 
         // pokud konfiguracni soubor neexistuje nebo bude mit spatny format, tak zobrazime okno s vyberem verzi
         // minecraftu a vygenerujem konfiguracni soubor
@@ -80,12 +83,21 @@ public final class McLauncher
                         LOGGER.error("main", "Verze minecraftu neni zatim inicializovana");
                         return;
                     }
-                    if (!Config.save(Minecraft.CONFIG_FILE, config)) {
+                    if (!Config.save(CONFIG_FILE, config)) {
                         exit();
                     }
                 }
             });
             selector.setVisible(true);
+        }
+        // kontrola spravne verze konfigurace a aplikace
+        if (!config.application.version.equals(VERSION)) {
+            String message = String.format("Verze konfiguracniho souboru %s neodpovida verzi aplikace %s",
+                    config.application.version,
+                    VERSION);
+            LOGGER.error("main", message);
+            Message.error(message);
+            exit();
         }
         Logger.setLoggingLevel(config.application.loggingLevel);
 
@@ -103,23 +115,23 @@ public final class McLauncher
         TagBuilder.rebuild();
 
         // nacte knihovny z adresare podle nacteneho konfiguracniho souboru a soubor nize opet ulozi
-        config.minecraft.autoLoadedLibs = Minecraft.loadLibraries(config.minecraft);
-        returnConfig.minecraft.autoLoadedLibs = config.minecraft.autoLoadedLibs;
+        config.minecraft.availableLibs = Minecraft.loadLibraries(config.minecraft);
+        returnConfig.minecraft.availableLibs = config.minecraft.availableLibs;
 
-        if (!Config.save(Minecraft.CONFIG_FILE, returnConfig)) {
+        if (!Config.save(CONFIG_FILE, returnConfig)) {
             exit();
         }
 
         // odebere vsechny soubory s logy v adresari s hrou
         if (config.application.removeLogs) {
-            LogsRemover.start(config.minecraft.directories.game);
+            LogsRemover.remove(config.minecraft.directories.game);
         }
 
         // spusti minecraft
         MinecraftRunner mcRunner = new MinecraftRunner(config);
-        mcRunner.start();
+        // mcRunner.start();
 
-        if (config.application.showConsole) {
+        if (config.application.consoleOutput) {
             mcRunner.join();
         } else {
             Thread.sleep(1000); // prodleva pro dokonceni zapisu do logu a uzavreni logu
@@ -129,7 +141,7 @@ public final class McLauncher
 
     private static void exit()
     {
-        Logger.close();
+        Logger.destroy();
         System.exit(0);
     }
 }

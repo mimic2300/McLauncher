@@ -38,7 +38,7 @@ public class Logger
     /**
      * Vytvori a otevre soubor pro zapis.
      */
-    public static void open()
+    public static void initialize()
     {
         Path path = Paths.get(LOG_FILE);
 
@@ -61,7 +61,7 @@ public class Logger
     /**
      * Uzavre stream pro zapis do logu.
      */
-    public static void close()
+    public static void destroy()
     {
         try {
             bufferedWriter.close();
@@ -198,20 +198,6 @@ public class Logger
     }
 
     /**
-     * Zaloguje minecraft zpravu.
-     * 
-     * @param method
-     * @param message
-     * @param params
-     */
-    public void minecraft(String message)
-    {
-        if (LoggingLevel.hasLevel(level, LoggingLevel.MINECRAFT)) {
-            write(String.format("[MC] %s%n", message));
-        }
-    }
-
-    /**
      * Nastavi uroven logovani.
      * 
      * @param levels
@@ -219,16 +205,6 @@ public class Logger
     public static void setLoggingLevel(LoggingLevel... loggingLevels)
     {
         level = LoggingLevel.getFlag(loggingLevels);
-    }
-
-    /**
-     * Nastavi uroven logovani.
-     * 
-     * @param loggingFlag
-     */
-    public static void setLoggingLevel(int loggingFlag)
-    {
-        level = loggingFlag;
     }
 
     /**

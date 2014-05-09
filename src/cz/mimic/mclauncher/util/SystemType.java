@@ -30,7 +30,7 @@ public enum SystemType
      * 
      * @return
      */
-    public boolean supported()
+    public boolean isSupported()
     {
         return supported;
     }
@@ -40,7 +40,7 @@ public enum SystemType
      * 
      * @return
      */
-    public String alias()
+    public String getAlias()
     {
         return alias;
     }
@@ -52,7 +52,7 @@ public enum SystemType
     @Override
     public String toString()
     {
-        return alias();
+        return getAlias();
     }
 
     /**
@@ -60,7 +60,7 @@ public enum SystemType
      * 
      * @return
      */
-    public static List<SystemType> supportedSystems()
+    public static List<SystemType> getSupportedSystems()
     {
         List<SystemType> systems = new ArrayList<SystemType>();
 

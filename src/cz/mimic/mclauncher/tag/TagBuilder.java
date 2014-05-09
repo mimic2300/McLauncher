@@ -91,19 +91,14 @@ public final class TagBuilder
         return (tag == null) ? null : TAGS.get(tag.toUpperCase());
     }
 
-    /**
-     * Nahradi vsechny tagy v textu za hodnoty.
-     * 
-     * @param inputText
-     * @return
-     */
-    public static String replaceTags(String inputText)
+    private static String replaceTags(String inputText)
     {
         if (inputText == null) {
             return inputText;
         }
 
         final Matcher matcher = PATTERN_TAG.matcher(inputText);
+
         while (matcher.find()) {
             String tag = matcher.group(2);
             Object value = get(tag);
@@ -111,6 +106,7 @@ public final class TagBuilder
         }
 
         final Matcher matcherSysVar = PATTERN_SYSTEM_VAR.matcher(inputText);
+
         while (matcherSysVar.find()) {
             String alias = matcherSysVar.group(2);
             String env = System.getenv(matcherSysVar.group(2));
@@ -170,12 +166,6 @@ public final class TagBuilder
         }
     }
 
-    /**
-     * Nahradi tagy v hodnotach instancnich promennych ve tride, ktere obsahuji nejaky tag.
-     * 
-     * @param clazz
-     * @param classInstance
-     */
     @SuppressWarnings({ "unchecked" })
     private static void translateClass(Class<?> clazz, Object classInstance)
     {
@@ -207,7 +197,7 @@ public final class TagBuilder
                     } else if (!(value instanceof String)) {
                         field.set(classInstance, value);
                     } else {
-                        String translate = replaceTags(value.toString()); // hodnota by mela byt primitivni typ
+                        String translate = replaceTags(value.toString());
                         field.set(classInstance, translate);
                     }
                 } catch (Exception e) {

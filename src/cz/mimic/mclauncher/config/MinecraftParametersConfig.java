@@ -18,7 +18,7 @@ public class MinecraftParametersConfig
 
     @Parameter("session")
     @Tag("session")
-    public String session; // Od verze 1.7.0 prejmenovano na accessToken.
+    public String session; // od verze 1.7.0 prejmenovano na accessToken
 
     @Parameter("version")
     @Tag("version")
@@ -36,7 +36,13 @@ public class MinecraftParametersConfig
      * Vytvori instanci nastaveni parametru pro minecraft.
      */
     public MinecraftParametersConfig()
-    {}
+    {
+        username = "player";
+        session = null;
+        version = null;
+        accessToken = null;
+        tweakClass = null; // tyka se Forge
+    }
 
     /**
      * Vytvori kopii nastaveni parametru pro minecraft.

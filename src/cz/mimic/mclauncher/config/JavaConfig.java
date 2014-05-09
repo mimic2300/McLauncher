@@ -28,13 +28,19 @@ public final class JavaConfig
     public String xmx;
 
     @Tag("params")
-    public List<String> params;
+    @SerializedName("params")
+    public List<String> parameters;
 
     /**
      * Vytvori instanci konfigurace javy.
      */
     public JavaConfig()
-    {}
+    {
+        path = "%programfiles%\\Java\\jre8\\bin\\java.exe"; // pro windows
+        xms = "512M";
+        xmx = "2G";
+        parameters = null;
+    }
 
     /**
      * Vytvori kopii konfigurace javy.
@@ -47,8 +53,8 @@ public final class JavaConfig
         xms = c.xms;
         xmx = c.xmx;
 
-        if (c.params != null) {
-            params = new ArrayList<String>(c.params);
+        if (c.parameters != null) {
+            parameters = new ArrayList<String>(c.parameters);
         }
     }
 
@@ -57,12 +63,12 @@ public final class JavaConfig
      * 
      * @return
      */
-    public String parametersString()
+    public String getParametersString()
     {
         StringBuilder sb = new StringBuilder();
 
-        if (params != null) {
-            for (String param : params) {
+        if (parameters != null) {
+            for (String param : parameters) {
                 sb.append(param).append(" ");
             }
         }

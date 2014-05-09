@@ -42,7 +42,7 @@ public enum MinecraftVersion
     MC_1_6_4_FORGE_11_1_965("1.6.4 Forge 11.1.965") {
 
         @Override
-        public void applyVersionChanges(MinecraftConfig minecraft)
+        public void overrideConfig(MinecraftConfig minecraft)
         {
             minecraft.mainClass = "net.minecraft.launchwrapper.Launch";
 
@@ -53,8 +53,6 @@ public enum MinecraftVersion
             minecraft.parameters.session = "1337535510N";
         }
     };
-
-    private static final VersionComparator COMPARATOR = new VersionComparator();
 
     private String alias;
 
@@ -68,7 +66,7 @@ public enum MinecraftVersion
      * 
      * @return
      */
-    public String alias()
+    public String getAlias()
     {
         return alias;
     }
@@ -78,8 +76,12 @@ public enum MinecraftVersion
      * 
      * @param minecraft
      */
-    public abstract void applyVersionChanges(MinecraftConfig minecraft);
+    public abstract void overrideConfig(MinecraftConfig minecraft);
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Enum#toString()
+     */
     @Override
     public String toString()
     {
@@ -91,20 +93,18 @@ public enum MinecraftVersion
      * 
      * @return
      */
-    public static List<MinecraftVersion> sortedVersions()
+    public static List<MinecraftVersion> getSortedVersions()
     {
         List<MinecraftVersion> versions = Arrays.asList(values());
-        Collections.sort(versions, COMPARATOR);
-        return versions;
-    }
-
-    private static class VersionComparator implements Comparator<MinecraftVersion>
-    {
-        @Override
-        public int compare(MinecraftVersion v1, MinecraftVersion v2)
+        Collections.sort(versions, new Comparator<MinecraftVersion>()
         {
-            // novejsi verze ma prednost
-            return v2.alias.compareTo(v1.alias);
-        }
+            @Override
+            public int compare(MinecraftVersion v1, MinecraftVersion v2)
+            {
+                // novejsi verze ma prednost
+                return v2.alias.compareTo(v1.alias);
+            }
+        });
+        return versions;
     }
 }

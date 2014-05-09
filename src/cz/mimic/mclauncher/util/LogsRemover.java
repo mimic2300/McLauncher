@@ -22,7 +22,7 @@ public class LogsRemover
      * 
      * @param directory
      */
-    public static void start(String directory)
+    public static void remove(String directory)
     {
         File root = new File(Paths.get(directory).toFile().getAbsolutePath());
         File[] files = root.listFiles();
@@ -33,8 +33,10 @@ public class LogsRemover
             if (m.find()) {
                 try {
                     f.delete();
-                    LOGGER.info("start", "Log %s byl vymazan", f.getName());
-                } finally {
+                    LOGGER.debug("remove", "Log %s byl vymazan", f.getName());
+
+                } catch (SecurityException e) {
+                    // null
                 }
             }
         }

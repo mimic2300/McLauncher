@@ -19,7 +19,7 @@ public final class SystemCheck
      */
     public static boolean isSupported()
     {
-        return autoDetect().supported();
+        return getCurrent().isSupported();
     }
 
     /**
@@ -62,7 +62,7 @@ public final class SystemCheck
         return (OS.indexOf("sunos") >= 0);
     }
 
-    private static SystemType autoDetect()
+    private static SystemType getCurrent()
     {
         if (isWindows()) {
             return SystemType.WINDOWS;

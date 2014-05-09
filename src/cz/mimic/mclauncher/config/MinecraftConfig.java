@@ -23,14 +23,20 @@ public final class MinecraftConfig
     @Tag("customLibs")
     public List<String> customLibs;
 
-    @Tag("libs")
-    public List<String> autoLoadedLibs;
+    @Tag("availableLibs")
+    public List<String> availableLibs;
 
     /**
      * Vytvori instanci konfigurace pro minecraft.
      */
     public MinecraftConfig()
-    {}
+    {
+        mainClass = "net.minecraft.client.main.Main";
+        directories = new MinecraftDirectoriesConfig();
+        parameters = new MinecraftParametersConfig();
+        customLibs = null;
+        availableLibs = null; // nacte se pozdeji automaticky
+    }
 
     /**
      * vytvori kopii konfigurace pro minecraft.
@@ -46,8 +52,8 @@ public final class MinecraftConfig
         if (c.customLibs != null) {
             customLibs = new ArrayList<String>(c.customLibs);
         }
-        if (c.autoLoadedLibs != null) {
-            autoLoadedLibs = new ArrayList<String>(c.autoLoadedLibs);
+        if (c.availableLibs != null) {
+            availableLibs = new ArrayList<String>(c.availableLibs);
         }
     }
 
@@ -56,9 +62,9 @@ public final class MinecraftConfig
      * 
      * @return
      */
-    public String getAutoLoadedLibsString()
+    public String getAvailableLibsString()
     {
-        return prepareLibs(autoLoadedLibs);
+        return prepareLibsString(availableLibs);
     }
 
     /**
@@ -68,7 +74,7 @@ public final class MinecraftConfig
      */
     public String getCustomLibsString()
     {
-        return prepareLibs(customLibs);
+        return prepareLibsString(customLibs);
     }
 
     /**
@@ -78,10 +84,10 @@ public final class MinecraftConfig
      */
     public String getAllLibsString()
     {
-        return getAutoLoadedLibsString() + getCustomLibsString();
+        return getAvailableLibsString() + getCustomLibsString();
     }
 
-    private String prepareLibs(List<String> libs)
+    private String prepareLibsString(List<String> libs)
     {
         if (libs == null) {
             return "";

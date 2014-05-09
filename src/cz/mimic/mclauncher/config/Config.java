@@ -23,19 +23,23 @@ public final class Config
     private static final Logger LOGGER = new Logger(Config.class);
 
     @SerializedName("application")
-    public ApplicationConfig application = new ApplicationConfig();
+    public ApplicationConfig application;
 
     @SerializedName("java")
-    public JavaConfig java = new JavaConfig();
+    public JavaConfig java;
 
     @SerializedName("minecraft")
-    public MinecraftConfig minecraft = new MinecraftConfig();
+    public MinecraftConfig minecraft;
 
     /**
      * Vytvori instanci konfigurace.
      */
     public Config()
-    {}
+    {
+        application = new ApplicationConfig();
+        java = new JavaConfig();
+        minecraft = new MinecraftConfig();
+    }
 
     /**
      * Vytvori kopii konfigurace.
@@ -52,24 +56,24 @@ public final class Config
     /**
      * Ulozi konfiguraci do souboru v Json.
      * 
-     * @param jsonFile
+     * @param configFile
      * @param config
      * @return
      */
-    public static boolean save(String jsonFile, Config config)
+    public static boolean save(String configFile, Config config)
     {
         if (config == null) {
             LOGGER.error("save", "Konfigurace je NULL");
             return false;
         }
-        try (FileWriter fw = new FileWriter(jsonFile)) {
+        try (FileWriter fw = new FileWriter(configFile)) {
             String json = Json.JSON_SAVE_PRETTY_INSTANCE.toJson(config);
             fw.write(json);
-            LOGGER.info("save", "Konfigurace byla ulozena do %s", jsonFile);
+            LOGGER.info("save", "Konfigurace byla ulozena do %s", configFile);
             return true;
 
         } catch (IOException e) {
-            LOGGER.error("save", "Nastala chyba pri ukladani konfigurace do %s", jsonFile);
+            LOGGER.error("save", "Nastala chyba pri ukladani konfigurace do %s", configFile);
             LOGGER.debug(e);
             return false;
         }
@@ -78,26 +82,26 @@ public final class Config
     /**
      * Nacte konfiguraci z Json souboru.
      * 
-     * @param jsonFile
+     * @param configFile
      * @return
      */
-    public static Config load(String jsonFile)
+    public static Config load(String configFile)
     {
         Config config = null;
 
-        if (!Files.exists(Paths.get(jsonFile))) {
-            LOGGER.warning("load", "Konfiguracni soubor %s neexistuje", jsonFile);
+        if (!Files.exists(Paths.get(configFile))) {
+            LOGGER.warning("load", "Konfiguracni soubor %s neexistuje", configFile);
             return config;
         }
-        try (BufferedReader br = new BufferedReader(new FileReader(jsonFile))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(configFile))) {
             config = Json.JSON_LOAD_PRETTY_INSTANCE.fromJson(br, Config.class);
-            LOGGER.info("load", "Konfiguracni soubor %s byl nacten", jsonFile);
+            LOGGER.info("load", "Konfiguracni soubor %s byl nacten", configFile);
 
         } catch (IOException e) {
-            LOGGER.error("load", "Nastala chyba pri nacitani konfiguracniho souboru %s", jsonFile);
+            LOGGER.error("load", "Nastala chyba pri nacitani konfiguracniho souboru %s", configFile);
             LOGGER.debug(e);
         } catch (JsonParseException e) {
-            LOGGER.error("load", "Json soubor %s neni validni", jsonFile);
+            LOGGER.error("load", "Json soubor %s neni validni", configFile);
         }
         return config;
     }

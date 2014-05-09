@@ -42,13 +42,13 @@ public class MinecraftRunner extends Thread
 
             LOGGER.info("run", "Minecraft se nyni spusti, pockejte prosim...%n");
 
-            if (config.application.showConsole) {
+            if (config.application.consoleOutput) {
                 try (BufferedReader input = new BufferedReader(new InputStreamReader(proc.getInputStream()))) {
                     while ((line = input.readLine()) != null) {
                         if (isInterrupted()) {
                             break;
                         }
-                        LOGGER.minecraft(line);
+                        System.out.println(line);
                     }
                 }
             }

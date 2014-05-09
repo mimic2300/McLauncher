@@ -53,7 +53,7 @@ public class VersionSelector extends JDialog
         lbVersion.setFont(new Font("Verdana", Font.BOLD, 11));
 
         cbVersion = new JComboBox<MinecraftVersion>();
-        for (MinecraftVersion v : MinecraftVersion.sortedVersions()) {
+        for (MinecraftVersion v : MinecraftVersion.getSortedVersions()) {
             cbVersion.addItem(v);
         }
 
