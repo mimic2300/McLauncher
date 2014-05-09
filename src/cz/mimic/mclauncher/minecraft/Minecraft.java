@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Stack;
 
 import cz.mimic.mclauncher.config.Config;
-import cz.mimic.mclauncher.config.ConfigMinecraft;
+import cz.mimic.mclauncher.config.MinecraftConfig;
 import cz.mimic.mclauncher.logger.Logger;
 import cz.mimic.mclauncher.util.Util;
 
@@ -19,7 +19,7 @@ public final class Minecraft
 {
     private static final Logger LOGGER = new Logger(Minecraft.class);
 
-    public static final String DEFAULT_CONFIG_FILE = "minecraft.json";
+    public static final String CONFIG_FILE = "mcLauncher.json";
 
     private Minecraft()
     {}
@@ -30,7 +30,7 @@ public final class Minecraft
      * @param librariesDirectory
      * @return
      */
-    public static List<String> loadLibraries(ConfigMinecraft minecraft)
+    public static List<String> loadLibraries(MinecraftConfig minecraft)
     {
         if (minecraft.directories.libraries == null) {
             LOGGER.error("loadLibraries", "Adresar s knihovnami %d neexistuje", minecraft.directories.libraries);
@@ -84,7 +84,7 @@ public final class Minecraft
      * @param minecraft
      * @return
      */
-    public static String getMinecraftJar(ConfigMinecraft minecraft)
+    public static String getMinecraftJar(MinecraftConfig minecraft)
     {
         File file = new File(String.format("%s\\versions\\%s\\%s.jar",
                 minecraft.directories.game,
@@ -101,7 +101,7 @@ public final class Minecraft
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\"").append(config.java.javawDir).append("\"");
+        sb.append("\"").append(config.java.path).append("\"");
         sb.append(" -XX:HeapDumpPath=")
                 .append("MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump");
         sb.append(" -Xms").append(config.java.xms);

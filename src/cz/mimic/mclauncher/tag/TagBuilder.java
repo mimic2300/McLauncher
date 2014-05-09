@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cz.mimic.mclauncher.config.Config;
 import cz.mimic.mclauncher.logger.Logger;
 
 /**
@@ -49,12 +50,14 @@ public final class TagBuilder
         if (!CLASSES.containsKey(clazz)) {
             if (clazz.isAnnotationPresent(Tagged.class)) {
                 CLASSES.put(clazz, clazzInstance);
-                LOGGER.info("addClass", "Trida %s byla pridana do seznamu", clazz.getSimpleName());
+                LOGGER.debug("addClass", "Trida %s byla pridana do seznamu", clazz.getSimpleName());
             } else {
-                LOGGER.warning("addClass",
-                        "Trida %s neni oznacena jako %s",
-                        clazz.getSimpleName(),
-                        Tagged.class.getSimpleName());
+                if (!clazz.equals(Config.class)) {
+                    LOGGER.warning("addClass",
+                            "Trida %s neni oznacena jako %s",
+                            clazz.getSimpleName(),
+                            Tagged.class.getSimpleName());
+                }
             }
         } else {
             LOGGER.warning("addClass", "Seznam trid jiz tridu %s obsahuje", clazz.getSimpleName());
@@ -74,7 +77,7 @@ public final class TagBuilder
         for (Class<?> clazz : CLASSES.keySet()) {
             translateClass(clazz, CLASSES.get(clazz));
         }
-        LOGGER.info("rebuild", "Hotovo");
+        LOGGER.debug("rebuild", "Hotovo");
     }
 
     /**
@@ -121,23 +124,6 @@ public final class TagBuilder
     }
 
     /**
-     * Ziska tag instancni promenne z kompletniho tagu (spojeni tagu tridy a tagu instancni promenne).
-     * 
-     * @param fullTag
-     * @return
-     */
-    private static String getFieldTag(String fullTag)
-    {
-        for (String key : TAGS.keySet()) {
-            if (key.equals(fullTag.toUpperCase())) {
-                String[] tokens = key.split("::");
-                return tokens[tokens.length - 1];
-            }
-        }
-        return fullTag;
-    }
-
-    /**
      * Prida vsechny tagy instancnich promennych ze tridy do seznamu tagu.
      * 
      * @param clazz
@@ -172,10 +158,10 @@ public final class TagBuilder
                     Object value = field.get(clazzInstance);
 
                     if (value == null) {
-                        LOGGER.warning("addTagsFromClass", "Tag %s ma hodnotu NULL", fullTag);
+                        LOGGER.info("addTagsFromClass", "Tag %s ma hodnotu NULL", fullTag);
                     } else {
                         TAGS.put(fullTag, value);
-                        LOGGER.info("addTagsFromClass", "Tag %s byl pridan s hodnotou %s", fullTag, value);
+                        LOGGER.debug("addTagsFromClass", "Tag %s byl pridan s hodnotou %s", fullTag, value);
                     }
                 }
             } catch (IllegalAccessException e) {

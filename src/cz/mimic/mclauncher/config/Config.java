@@ -23,13 +23,13 @@ public final class Config
     private static final Logger LOGGER = new Logger(Config.class);
 
     @SerializedName("application")
-    public ConfigApplication application = new ConfigApplication();
+    public ApplicationConfig application = new ApplicationConfig();
 
     @SerializedName("java")
-    public ConfigJava java = new ConfigJava();
+    public JavaConfig java = new JavaConfig();
 
     @SerializedName("minecraft")
-    public ConfigMinecraft minecraft = new ConfigMinecraft();
+    public MinecraftConfig minecraft = new MinecraftConfig();
 
     /**
      * Vytvori instanci konfigurace.
@@ -44,9 +44,9 @@ public final class Config
      */
     public Config(final Config c)
     {
-        application = new ConfigApplication(c.application);
-        java = new ConfigJava(c.java);
-        minecraft = new ConfigMinecraft(c.minecraft);
+        application = new ApplicationConfig(c.application);
+        java = new JavaConfig(c.java);
+        minecraft = new MinecraftConfig(c.minecraft);
     }
 
     /**
@@ -86,7 +86,7 @@ public final class Config
         Config config = null;
 
         if (!Files.exists(Paths.get(jsonFile))) {
-            LOGGER.error("load", "Konfiguracni soubor %s neexistuje", jsonFile);
+            LOGGER.warning("load", "Konfiguracni soubor %s neexistuje", jsonFile);
             return config;
         }
         try (BufferedReader br = new BufferedReader(new FileReader(jsonFile))) {

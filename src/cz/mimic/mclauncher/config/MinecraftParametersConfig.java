@@ -10,7 +10,7 @@ import cz.mimic.mclauncher.tag.Tagged;
  * @author mimic
  */
 @Tagged("mc::param")
-public class ConfigMinecraftParameters
+public class MinecraftParametersConfig
 {
     @Parameter("username")
     @Tag("username")
@@ -35,7 +35,7 @@ public class ConfigMinecraftParameters
     /**
      * Vytvori instanci nastaveni parametru pro minecraft.
      */
-    public ConfigMinecraftParameters()
+    public MinecraftParametersConfig()
     {}
 
     /**
@@ -43,7 +43,7 @@ public class ConfigMinecraftParameters
      * 
      * @param c
      */
-    public ConfigMinecraftParameters(ConfigMinecraftParameters c)
+    public MinecraftParametersConfig(MinecraftParametersConfig c)
     {
         username = c.username;
         version = c.version;

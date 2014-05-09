@@ -70,6 +70,8 @@ public class MinecraftRunner implements Runnable
                     temp.getAbsolutePath()));
             Runtime.getRuntime().exec(String.format(config.application.closeFormat, config.application.uniqueTitle));
 
+            LOGGER.info("run", "Minecraft byl spusten");
+
             try {
                 Thread.sleep(Integer.valueOf(config.application.delayBeforeDelete));
                 Files.delete(Paths.get(temp.getAbsolutePath()));

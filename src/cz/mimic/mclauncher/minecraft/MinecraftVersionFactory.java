@@ -1,11 +1,11 @@
 package cz.mimic.mclauncher.minecraft;
 
 import cz.mimic.mclauncher.config.Config;
-import cz.mimic.mclauncher.config.ConfigApplication;
-import cz.mimic.mclauncher.config.ConfigJava;
-import cz.mimic.mclauncher.config.ConfigMinecraft;
-import cz.mimic.mclauncher.config.ConfigMinecraftDirectories;
-import cz.mimic.mclauncher.config.ConfigMinecraftParameters;
+import cz.mimic.mclauncher.config.ApplicationConfig;
+import cz.mimic.mclauncher.config.JavaConfig;
+import cz.mimic.mclauncher.config.MinecraftConfig;
+import cz.mimic.mclauncher.config.MinecraftDirectoriesConfig;
+import cz.mimic.mclauncher.config.MinecraftParametersConfig;
 import cz.mimic.mclauncher.logger.Logger;
 import cz.mimic.mclauncher.logger.LoggingLevel;
 import cz.mimic.mclauncher.util.Message;
@@ -52,7 +52,7 @@ public final class MinecraftVersionFactory
 
     private static void setDefaultApplicationConfig(Config config)
     {
-        ConfigApplication application = new ConfigApplication();
+        ApplicationConfig application = new ApplicationConfig();
         application.runFormat = "cmd /k start \"%s\" /min %s"; // 1 %s je uniqueTitle, 2 %s je absolutni cesta k .bat
         application.closeFormat = "taskkill /FI \"WINDOWTITLE eq %s*\""; // %s je uniqueTitle
         application.delayBeforeDelete = "3000"; // ms
@@ -65,8 +65,8 @@ public final class MinecraftVersionFactory
 
     private static void setDefaultJavaConfig(Config config)
     {
-        ConfigJava java = new ConfigJava();
-        java.javawDir = "%programfiles%\\Java\\jre8\\bin\\javaw.exe";
+        JavaConfig java = new JavaConfig();
+        java.path = "%programfiles%\\Java\\jre8\\bin\\java.exe";
         java.xms = "512M";
         java.xmx = "2G";
 
@@ -75,16 +75,16 @@ public final class MinecraftVersionFactory
 
     private static void setDefaultMinecraftConfig(Config config)
     {
-        ConfigMinecraft minecraft = new ConfigMinecraft();
+        MinecraftConfig minecraft = new MinecraftConfig();
         minecraft.mainClass = "net.minecraft.client.main.Main";
 
-        minecraft.directories = new ConfigMinecraftDirectories();
+        minecraft.directories = new MinecraftDirectoriesConfig();
         minecraft.directories.game = "%appdata%\\.minecraft";
         minecraft.directories.assets = "{mc::dir::game}\\assets";
         minecraft.directories.libraries = "{mc::dir::game}\\libraries";
         minecraft.directories.natives = "{mc::dir::game}\\versions\\{mc::param::version}\\{mc::param::version}-natives";
 
-        minecraft.parameters = new ConfigMinecraftParameters();
+        minecraft.parameters = new MinecraftParametersConfig();
         minecraft.parameters.username = "player";
 
         config.minecraft = minecraft;

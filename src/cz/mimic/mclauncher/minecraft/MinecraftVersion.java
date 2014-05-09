@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import cz.mimic.mclauncher.config.ConfigMinecraft;
+import cz.mimic.mclauncher.config.MinecraftConfig;
 
 /**
  * Podporovane verze minecraftu.
@@ -42,7 +42,7 @@ public enum MinecraftVersion
     MC_1_6_4_FORGE_11_1_965("1.6.4 Forge 11.1.965") {
 
         @Override
-        public void applyVersionChanges(ConfigMinecraft minecraft)
+        public void applyVersionChanges(MinecraftConfig minecraft)
         {
             minecraft.mainClass = "net.minecraft.launchwrapper.Launch";
 
@@ -78,7 +78,7 @@ public enum MinecraftVersion
      * 
      * @param minecraft
      */
-    public abstract void applyVersionChanges(ConfigMinecraft minecraft);
+    public abstract void applyVersionChanges(MinecraftConfig minecraft);
 
     @Override
     public String toString()

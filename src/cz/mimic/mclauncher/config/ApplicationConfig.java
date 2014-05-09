@@ -4,7 +4,7 @@ import cz.mimic.mclauncher.tag.Tag;
 import cz.mimic.mclauncher.tag.Tagged;
 
 @Tagged("app")
-public final class ConfigApplication
+public final class ApplicationConfig
 {
     @Tag("runFormat")
     public String runFormat;
@@ -27,7 +27,7 @@ public final class ConfigApplication
     /**
      * Vytvori instanci konfigurace aplikace.
      */
-    public ConfigApplication()
+    public ApplicationConfig()
     {}
 
     /**
@@ -35,7 +35,7 @@ public final class ConfigApplication
      * 
      * @param c
      */
-    public ConfigApplication(ConfigApplication c)
+    public ApplicationConfig(ApplicationConfig c)
     {
         runFormat = c.runFormat;
         closeFormat = c.closeFormat;

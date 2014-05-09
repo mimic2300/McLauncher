@@ -14,10 +14,10 @@ import cz.mimic.mclauncher.tag.Tagged;
  * @author mimic
  */
 @Tagged("java")
-public final class ConfigJava
+public final class JavaConfig
 {
-    @Tag("javawDir")
-    public String javawDir;
+    @Tag("path")
+    public String path;
 
     @Tag("xms")
     @SerializedName("initialMemory")
@@ -33,7 +33,7 @@ public final class ConfigJava
     /**
      * Vytvori instanci konfigurace javy.
      */
-    public ConfigJava()
+    public JavaConfig()
     {}
 
     /**
@@ -41,9 +41,9 @@ public final class ConfigJava
      * 
      * @param c
      */
-    public ConfigJava(ConfigJava c)
+    public JavaConfig(JavaConfig c)
     {
-        javawDir = c.javawDir;
+        path = c.path;
         xms = c.xms;
         xmx = c.xmx;
 

@@ -10,7 +10,7 @@ import cz.mimic.mclauncher.tag.Tagged;
  * @author mimic
  */
 @Tagged("mc::dir")
-public class ConfigMinecraftDirectories
+public class MinecraftDirectoriesConfig
 {
     @Parameter(value = "gameDir", quotationMarks = true)
     @Tag("game")
@@ -29,7 +29,7 @@ public class ConfigMinecraftDirectories
     /**
      * Vytvori instanci nastaveni adresaru pro minecraft.
      */
-    public ConfigMinecraftDirectories()
+    public MinecraftDirectoriesConfig()
     {}
 
     /**
@@ -37,7 +37,7 @@ public class ConfigMinecraftDirectories
      * 
      * @param c
      */
-    public ConfigMinecraftDirectories(ConfigMinecraftDirectories c)
+    public MinecraftDirectoriesConfig(MinecraftDirectoriesConfig c)
     {
         game = c.game;
         libraries = c.libraries;

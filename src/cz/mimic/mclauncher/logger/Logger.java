@@ -1,5 +1,14 @@
 package cz.mimic.mclauncher.logger;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * Slouzi pro logovani ruznych udalosti.
  * 
@@ -7,7 +16,11 @@ package cz.mimic.mclauncher.logger;
  */
 public class Logger
 {
+    private static final String LOG_FILE = "mcLauncher.log";
+
     private static int level = LoggingLevel.getFlag(LoggingLevel.ERROR); // ve vychozim stavu vypisuje jen chyby
+    private static FileWriter fileWriter;
+    private static BufferedWriter bufferedWriter;
 
     private final Class<?> clazz;
 
@@ -22,6 +35,43 @@ public class Logger
     }
 
     /**
+     * Vytvori a otevre soubor pro zapis.
+     */
+    public static void open()
+    {
+        Path path = Paths.get(LOG_FILE);
+
+        try {
+            if (Files.exists(path)) {
+                Files.delete(path);
+            }
+            Files.createFile(path);
+
+            fileWriter = new FileWriter(new File(LOG_FILE));
+            bufferedWriter = new BufferedWriter(fileWriter);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Uzavre stream pro zapis do logu.
+     */
+    public static void close()
+    {
+        try {
+            bufferedWriter.close();
+            fileWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Zaloguje chybovou zpravu.
      * 
      * @param message
@@ -30,7 +80,7 @@ public class Logger
     public void error(String message, Object... params)
     {
         if (LoggingLevel.hasLevel(level, LoggingLevel.ERROR)) {
-            System.out.format("[E] %s%n", String.format(message, params));
+            write(String.format("[ERROR] %s%n", String.format(message, params)));
         }
     }
 
@@ -44,7 +94,7 @@ public class Logger
     public void error(String method, String message, Object... params)
     {
         if (LoggingLevel.hasLevel(level, LoggingLevel.ERROR)) {
-            System.out.format("[E] %s.%s :: %s%n", clazz.getSimpleName(), method, String.format(message, params));
+            write(String.format("[ERROR] %s.%s :: %s%n", clazz.getSimpleName(), method, String.format(message, params)));
         }
     }
 
@@ -57,7 +107,7 @@ public class Logger
     public void warning(String message, Object... params)
     {
         if (LoggingLevel.hasLevel(level, LoggingLevel.WARNING)) {
-            System.out.format("[W] %s%n", String.format(message, params));
+            write(String.format("[WARNING] %s%n", String.format(message, params)));
         }
     }
 
@@ -71,7 +121,10 @@ public class Logger
     public void warning(String method, String message, Object... params)
     {
         if (LoggingLevel.hasLevel(level, LoggingLevel.WARNING)) {
-            System.out.format("[W] %s.%s :: %s%n", clazz.getSimpleName(), method, String.format(message, params));
+            write(String.format("[WARNING] %s.%s :: %s%n",
+                    clazz.getSimpleName(),
+                    method,
+                    String.format(message, params)));
         }
     }
 
@@ -84,7 +137,7 @@ public class Logger
     public void info(String message, Object... params)
     {
         if (LoggingLevel.hasLevel(level, LoggingLevel.INFO)) {
-            System.out.format("[I] %s%n", String.format(message, params));
+            write(String.format("[INFO] %s%n", String.format(message, params)));
         }
     }
 
@@ -98,7 +151,7 @@ public class Logger
     public void info(String method, String message, Object... params)
     {
         if (LoggingLevel.hasLevel(level, LoggingLevel.INFO)) {
-            System.out.format("[I] %s.%s :: %s%n", clazz.getSimpleName(), method, String.format(message, params));
+            write(String.format("[INFO] %s.%s :: %s%n", clazz.getSimpleName(), method, String.format(message, params)));
         }
     }
 
@@ -111,7 +164,7 @@ public class Logger
     public void debug(String message, Object... params)
     {
         if (LoggingLevel.hasLevel(level, LoggingLevel.DEBUG)) {
-            System.out.format("[D] %s%n", String.format(message, params));
+            write(String.format("[DEBUG] %s%n", String.format(message, params)));
         }
     }
 
@@ -125,7 +178,7 @@ public class Logger
     public void debug(String method, String message, Object... params)
     {
         if (LoggingLevel.hasLevel(level, LoggingLevel.DEBUG)) {
-            System.out.format("[D] %s.%s :: %s%n", clazz.getSimpleName(), method, String.format(message, params));
+            write(String.format("[DEBUG] %s.%s :: %s%n", clazz.getSimpleName(), method, String.format(message, params)));
         }
     }
 
@@ -156,10 +209,33 @@ public class Logger
     /**
      * Nastavi uroven logovani.
      * 
+     * @param loggingFlag
+     */
+    public static void setLoggingLevel(int loggingFlag)
+    {
+        level = loggingFlag;
+    }
+
+    /**
+     * Nastavi uroven logovani.
+     * 
      * @param loggingLevel
      */
     public static void setLoggingLevel(String loggingLevel)
     {
         level = LoggingLevel.getByName(loggingLevel).flag();
+    }
+
+    private static void write(String message)
+    {
+        if (bufferedWriter != null) {
+            try {
+                bufferedWriter.write(message);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.print(message);
     }
 }

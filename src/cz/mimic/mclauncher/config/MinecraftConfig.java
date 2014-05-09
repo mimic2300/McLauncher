@@ -12,13 +12,13 @@ import cz.mimic.mclauncher.tag.Tagged;
  * @author mimic
  */
 @Tagged("mc")
-public final class ConfigMinecraft
+public final class MinecraftConfig
 {
-    public ConfigMinecraftDirectories directories;
-    public ConfigMinecraftParameters parameters;
-
     @Tag("mainClass")
     public String mainClass;
+
+    public MinecraftDirectoriesConfig directories;
+    public MinecraftParametersConfig parameters;
 
     @Tag("customLibs")
     public List<String> customLibs;
@@ -29,7 +29,7 @@ public final class ConfigMinecraft
     /**
      * Vytvori instanci konfigurace pro minecraft.
      */
-    public ConfigMinecraft()
+    public MinecraftConfig()
     {}
 
     /**
@@ -37,11 +37,11 @@ public final class ConfigMinecraft
      * 
      * @param c
      */
-    public ConfigMinecraft(ConfigMinecraft c)
+    public MinecraftConfig(MinecraftConfig c)
     {
         mainClass = c.mainClass;
-        directories = new ConfigMinecraftDirectories(c.directories);
-        parameters = new ConfigMinecraftParameters(c.parameters);
+        directories = new MinecraftDirectoriesConfig(c.directories);
+        parameters = new MinecraftParametersConfig(c.parameters);
 
         if (c.customLibs != null) {
             customLibs = new ArrayList<String>(c.customLibs);
