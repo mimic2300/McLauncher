@@ -16,6 +16,9 @@ import cz.mimic.mclauncher.tag.TagBuilder;
 import cz.mimic.mclauncher.ui.VersionSelector;
 import cz.mimic.mclauncher.ui.component.util.Executor;
 import cz.mimic.mclauncher.util.LogsRemover;
+import cz.mimic.mclauncher.util.Message;
+import cz.mimic.mclauncher.util.SystemCheck;
+import cz.mimic.mclauncher.util.SystemType;
 
 /*
  * - Pokud hra nepujde spustit, tak je potreba zkontrolovat adresar s knihovnami, jestli u nektere neexistuji 2
@@ -31,7 +34,7 @@ import cz.mimic.mclauncher.util.LogsRemover;
  */
 public final class McLauncher
 {
-    private static final Logger LOGGER = new Logger(TagBuilder.class);
+    private static final Logger LOGGER = new Logger(McLauncher.class);
 
     private static Config config;
 
@@ -45,6 +48,15 @@ public final class McLauncher
     {
         Logger.open();
         Logger.setLoggingLevel(LoggingLevel.ALL.flag() ^ LoggingLevel.DEBUG.flag());
+
+        // kontrola typu operacniho systemu
+        if (!SystemCheck.isSupported()) {
+            String message = String.format("Vas operacni system neni aplikaci podporovan. Podporovane systemy jsou pouze %s",
+                    SystemType.supportedSystems());
+            LOGGER.error("main", message);
+            Message.error(message);
+            exit();
+        }
 
         config = Config.load(Minecraft.CONFIG_FILE);
 
