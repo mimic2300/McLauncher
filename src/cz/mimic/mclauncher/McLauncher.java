@@ -129,7 +129,7 @@ public final class McLauncher
 
         // spusti minecraft
         MinecraftRunner mcRunner = new MinecraftRunner(config);
-        // mcRunner.start();
+        mcRunner.start();
 
         if (config.application.consoleOutput) {
             mcRunner.join();
