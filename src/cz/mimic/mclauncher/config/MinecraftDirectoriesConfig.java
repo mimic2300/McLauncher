@@ -12,14 +12,14 @@ import cz.mimic.mclauncher.tag.Tagged;
 @Tagged("mc::dir")
 public class MinecraftDirectoriesConfig
 {
-    @Parameter(value = "game", quotationMarks = true)
+    @Parameter(value = "gameDir", quotationMarks = true)
     @Tag("game")
     public String game;
 
     @Tag("libraries")
     public String libraries;
 
-    @Parameter(value = "assets", quotationMarks = true)
+    @Parameter(value = "assetsDir", quotationMarks = true)
     @Tag("assets")
     public String assets;
 
